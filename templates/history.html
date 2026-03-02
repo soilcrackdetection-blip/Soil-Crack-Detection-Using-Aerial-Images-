@@ -7,16 +7,18 @@
 <div class="history-grid">
     {% for pred in history %}
     <div class="history-card">
-        <img src="{{ url_for('uploaded_file', filename=pred.original_image_path.replace('uploads/', '')) }}"
+        <img src="{{ pred.original_image_url if pred.original_image_url else 'https://res.cloudinary.com/dzgrnwe92/image/upload/v1740825224/soil_crack/original/default_dummy.png' }}"
             class="card-image" alt="Imagery Frame">
         <div class="card-body">
             <div class="card-meta">
-                <span class="severity-tag {{ pred.severity|lower }}">{{ pred.severity }} RISK</span>
-                <span class="card-date">{{ pred.created_at.strftime('%d %b %Y') }}</span>
+                <span class="severity-tag {{ pred.severity|lower if pred.severity else 'unknown' }}">{{ pred.severity if
+                    pred.severity else 'N/A' }} RISK</span>
+                <span class="card-date">{{ pred.created_at.strftime('%d %b %Y') if pred.created_at else 'N/A' }}</span>
             </div>
             <div class="card-stats">
                 <span class="stat-label">Areal Depth</span>
-                <span class="stat-value">{{ "%.2f"|format(pred.crack_area / 1000) }} cm²</span>
+                <span class="stat-value">{{ "%.2f"|format(pred.crack_area / 1000) if pred.crack_area else '0.00' }}
+                    cm²</span>
             </div>
             <div
                 style="margin-top: 16px; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">

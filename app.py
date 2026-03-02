@@ -109,7 +109,8 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    analyses = AnalysisResult.query.filter_by(user_id=current_user.id).order_by(AnalysisResult.created_at.desc()).limit(6).all()
+    return render_template('dashboard.html', history=analyses)
 
 @app.route('/history')
 @login_required

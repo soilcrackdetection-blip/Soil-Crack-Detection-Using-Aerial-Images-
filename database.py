@@ -18,7 +18,7 @@ class AnalysisResult(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete="CASCADE"), nullable=False)
     # Cloudinary fields
-    original_image_url = db.Column(db.String, nullable=False)
+    original_image_url = db.Column(db.String, nullable=True)
     original_public_id = db.Column(db.String)
     mask_image_url = db.Column(db.String)
     mask_public_id = db.Column(db.String)
