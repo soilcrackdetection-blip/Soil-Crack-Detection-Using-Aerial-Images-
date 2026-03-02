@@ -1,0 +1,18 @@
+.env
+instance/
+uploads/
+static/masks/
+__pycache__/
+*.pyc
+soil_crack.db
+
+# Large/Data folders
+weights/
+dataset/
+patches/
+images/
+masks/
+.vscode/
+.idea/
+*.log
+*.sqlite3
