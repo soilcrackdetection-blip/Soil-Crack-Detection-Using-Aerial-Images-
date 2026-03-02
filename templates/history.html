@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- History Content -->
+
+{% if history %}
+<div class="history-grid">
+    {% for pred in history %}
+    <div class="history-card">
+        <img src="{{ url_for('uploaded_file', filename=pred.original_image_path.replace('uploads/', '')) }}"
+            class="card-image" alt="Imagery Frame">
+        <div class="card-body">
+            <div class="card-meta">
+                <span class="severity-tag {{ pred.severity|lower }}">{{ pred.severity }} RISK</span>
+                <span class="card-date">{{ pred.created_at.strftime('%d %b %Y') }}</span>
+            </div>
+            <div class="card-stats">
+                <span class="stat-label">Areal Depth</span>
+                <span class="stat-value">{{ "%.2f"|format(pred.crack_area / 1000) }} cm²</span>
+            </div>
+            <div
+                style="margin-top: 16px; font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">
+                FRAME ID: 00{{ pred.id }}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div
+    style="background: rgba(255,255,255,0.02); padding: 100px; border-radius: 12px; text-align: center; border: 1px dashed var(--border);">
+    <div style="font-size: 48px; margin-bottom: 24px; opacity: 0.3;">📂</div>
+    <h3 style="color: var(--text-muted); margin-bottom: 8px;">No Archive Records</h3>
+    <p style="color: var(--text-muted); font-size: 14px;">Telemetry buffer is empty. Initialize a scan to begin data
+        logging.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn-pipeline"
+        style="width: auto; padding: 0 40px; display: inline-flex; align-items: center; text-decoration: none; margin-top: 32px;">OPEN
+        CONSOLE</a>
+</div>
+{% endif %}
+{% endblock %}

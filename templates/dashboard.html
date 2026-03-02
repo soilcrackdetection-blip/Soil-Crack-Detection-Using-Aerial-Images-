@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="analysis-console">
+    <div class="console-header">
+        <h2 class="console-title" style="font-size: 48px; margin-bottom: 12px;">Analysis Console</h2>
+        <p class="console-subtitle" style="font-size: 20px;">Upload high-resolution soil frames for precise crack
+            analysis.</p>
+    </div>
+
+    <form action="{{ url_for('predict') }}" method="post" enctype="multipart/form-data">
+        <div class="upload-zone" id="upload-zone">
+            <div class="upload-icon-box">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5">
+                    <path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"></path>
+                    <path d="M12 12v9"></path>
+                    <path d="m16 16-4-4-4 4"></path>
+                </svg>
+            </div>
+            <div class="upload-text-main" id="upload-text">Click to Select Frame</div>
+            <div class="upload-text-sub">JPG, PNG or TIFF (Max 10MB)</div>
+            <input type="file" id="imageInput" name="image" style="display: none;" accept="image/*">
+        </div>
+
+        <button type="submit" class="btn-pipeline" id="submit-btn" disabled>
+            INITIATE CRACK ANALYSIS
+        </button>
+    </form>
+</div>
+
+<div class="section-header"
+    style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 32px;">
+    <h2 class="section-title" style="margin-bottom: 0;">Command History</h2>
+    <a href="{{ url_for('history') }}"
+        style="color: var(--primary); text-decoration: none; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">HISTORY
+        LOG</a>
+</div>
+
+{% if history %}
+<div class="history-grid">
+    {% for pred in history[:6] %}
+    <div class="history-card">
+        <img src="{{ pred.image_path if pred.image_path.startswith('/') else '/' + pred.image_path.replace('\\', '/') }}"
+            class="card-image" alt="Imagery Frame">
+        <div class="card-body">
+            <div class="card-meta">
+                <span class="severity-tag {{ pred.severity|lower }}">{{ pred.severity }} RISK</span>
+                <span class="card-date">{{ pred.timestamp.strftime('%d %b %Y') }}</span>
+            </div>
+            <div class="card-stats">
+                <span class="stat-label">Areal Depth</span>
+                <span class="stat-value">{{ "%.2f"|format(pred.area / 1000) }} cm²</span>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div
+    style="background: rgba(255,255,255,0.02); padding: 40px; border-radius: 8px; text-align: center; border: 1px dashed var(--border);">
+    <p style="color: var(--text-muted); font-size: 14px;">No historical telemetry found in console buffer.</p>
+</div>
+{% endif %}
+
+<script>
+    const zone = document.getElementById('upload-zone');
+    const input = document.getElementById('imageInput');
+    const text = document.getElementById('upload-text');
+    const btn = document.getElementById('submit-btn');
+
+    zone.onclick = () => input.click();
+
+    input.onchange = () => {
+        if (input.files.length > 0) {
+            text.innerText = "FRAME LOADED: " + input.files[0].name;
+            btn.disabled = false;
+        }
+    };
+
+    zone.ondragover = (e) => {
+        e.preventDefault();
+        zone.style.borderColor = "var(--primary)";
+    };
+
+    zone.ondragleave = () => {
+        zone.style.borderColor = "var(--border)";
+    };
+
+    zone.ondrop = (e) => {
+        e.preventDefault();
+        zone.style.borderColor = "var(--border)";
+        if (e.dataTransfer.files.length > 0) {
+            input.files = e.dataTransfer.files;
+            text.innerText = "FRAME LOADED: " + input.files[0].name;
+            btn.disabled = false;
+        }
+    };
+</script>
+{% endblock %}

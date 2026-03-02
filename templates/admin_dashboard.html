@@ -1,0 +1,126 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="admin-header" style="margin-bottom: 40px;">
+    <h1
+        style="font-size: 48px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+        Administrative Control Panel
+    </h1>
+    <p style="color: var(--text-muted); font-size: 16px;">System-wide telemetry and user management.</p>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 48px;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 32px; border-radius: 12px;">
+        <div
+            style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;">
+            Total Active Users</div>
+        <div style="font-size: 48px; font-weight: 700; color: var(--primary);">{{ total_users }}</div>
+    </div>
+    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 32px; border-radius: 12px;">
+        <div
+            style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px;">
+            Total Analysis Logs</div>
+        <div style="font-size: 48px; font-weight: 700; color: var(--accent);">{{ total_analyses }}</div>
+    </div>
+</div>
+
+<div style="margin-bottom: 64px;">
+    <h3 style="margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px;">
+        <span style="width: 8px; height: 8px; background: var(--primary); border-radius: 50%;"></span>
+        User Directory
+    </h3>
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--border);">
+                <tr>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">ID
+                    </th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Username</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Email</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Role</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Joined</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 16px; font-size: 14px;">#{{ user.id }}</td>
+                    <td style="padding: 16px; font-size: 14px; font-weight: 600;">{{ user.username }}</td>
+                    <td style="padding: 16px; font-size: 14px; color: var(--text-muted);">{{ user.email }}</td>
+                    <td style="padding: 16px;">
+                        <span
+                            style="padding: 4px 12px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; background: {{ 'rgba(66, 133, 244, 0.1)' if user.role == 'admin' else 'rgba(0,0,0,0.05)' }}; color: {{ 'var(--primary)' if user.role == 'admin' else 'var(--text-muted)' }};">
+                            {{ user.role }}
+                        </span>
+                    </td>
+                    <td style="padding: 16px; font-size: 14px; color: var(--text-muted);">{{
+                        user.created_at.strftime('%Y-%m-%d') }}</td>
+                    <td style="padding: 16px;">
+                        <form action="{{ url_for('delete_user', user_id=user.id) }}" method="POST"
+                            onsubmit="return confirm('Archive user record? This action is irreversible.');">
+                            <button type="submit"
+                                style="background: none; border: none; color: #ea4335; cursor: pointer; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div>
+    <h3 style="margin-bottom: 24px; font-weight: 700; display: flex; align-items: center; gap: 12px;">
+        <span style="width: 8px; height: 8px; background: var(--accent); border-radius: 50%;"></span>
+        Analysis Master Log
+    </h3>
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="background: rgba(0,0,0,0.02); border-bottom: 1px solid var(--border);">
+                <tr>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">Log
+                        ID</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        User</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Severity</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Data Point</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Date</th>
+                    <th style="padding: 16px; font-size: 12px; text-transform: uppercase; color: var(--text-muted);">
+                        Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for log in analyses %}
+                <tr style="border-bottom: 1px solid var(--border);">
+                    <td style="padding: 16px; font-size: 14px;">SYS_{{ log.id }}</td>
+                    <td style="padding: 16px; font-size: 14px; font-weight: 600;">{{ log.user.username }}</td>
+                    <td style="padding: 16px;">
+                        <span class="severity-tag {{ log.severity|lower }}"
+                            style="font-size: 10px; padding: 4px 12px;">{{ log.severity }}</span>
+                    </td>
+                    <td style="padding: 16px; font-size: 14px; color: var(--text-muted);">{{
+                        "%.2f"|format(log.crack_area) }} px²</td>
+                    <td style="padding: 16px; font-size: 14px; color: var(--text-muted);">{{
+                        log.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td style="padding: 16px;">
+                        <form action="{{ url_for('delete_analysis', analysis_id=log.id) }}" method="POST">
+                            <button type="submit"
+                                style="background: none; border: none; color: #ea4335; cursor: pointer; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Wipe</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,11 @@
+flask
+flask-sqlalchemy
+flask-login
+torch
+torchvision
+pillow
+numpy
+werkzeug
+python-dotenv
+psycopg2-binary
+cloudinary

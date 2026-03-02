@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="auth-box">
+    <div style="text-align: center; margin-bottom: 32px;">
+        <h2 style="font-size: 24px; color: var(--accent);">Enroll System Node</h2>
+        <p style="color: var(--text-muted); font-size: 14px;">Register unique researcher identifier</p>
+    </div>
+
+    <form method="POST">
+        <div class="form-group">
+            <label
+                style="display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Researcher
+                ID</label>
+            <input type="text" name="username" class="form-input" required placeholder="unique_id">
+        </div>
+        <div class="form-group">
+            <label
+                style="display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Contact
+                Node (Email)</label>
+            <input type="email" name="email" class="form-input" required placeholder="researcher@terra.scan">
+        </div>
+        <div class="form-group" style="margin-bottom: 32px;">
+            <label
+                style="display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Secure
+                Key</label>
+            <input type="password" name="password" class="form-input" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-pipeline">INITIALIZE ENROLLMENT</button>
+    </form>
+
+    <div style="margin-top: 32px; text-align: center; border-top: 1px solid var(--border); padding-top: 24px;">
+        <p style="color: var(--text-muted); font-size: 13px;">Already enrolled? <a href="{{ url_for('login') }}"
+                style="color: var(--accent); text-decoration: none; font-weight: 700;">Sign In</a></p>
+    </div>
+</div>
+{% endblock %}

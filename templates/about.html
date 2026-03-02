@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="result-container">
+    <div class="card" style="max-width: 900px; margin: 0 auto; padding: 50px;">
+        <h1 style="font-size: 32px; font-weight: 800; margin-bottom: 30px;">Technical Architecture</h1>
+
+        <div style="line-height: 1.8; font-size: 16px; color: var(--text-main);">
+            <p style="margin-bottom: 40px; font-size: 18px; color: var(--text-muted);">
+                The <strong>Soil Crack Detection Platform</strong> is a high-resolution geotechnical monitoring system.
+                It integrates multi-stage deep learning pipelines to transform raw aerial imagery into actionable risk
+                assessments.
+            </p>
+
+            <div style="display: grid; gap: 40px;">
+                <section>
+                    <h3 style="margin-bottom: 12px; font-size: 20px;">1. Computer Vision Segmentation</h3>
+                    <p>
+                        The core segmentation engine utilizes a **ResNet-UNet** architecture. By leveraging a Residual
+                        Network (ResNet) backbone as an encoder, the model extracts multi-scale high-level features
+                        while the U-Net symmetric decoder preserves spatial resolution for millimeter-precise boundary
+                        mapping.
+                    </p>
+                </section>
+
+                <section>
+                    <h3 style="margin-bottom: 12px; font-size: 20px;">2. Geometric Feature Extraction</h3>
+                    <p>
+                        Following pixel-level identification, a specialized regression model estimates physical
+                        attributes. This stage performs spatial analysis to calculate **length**, **average width**, and
+                        **total displacement area**, providing quantitative metrics essential for geotechnical
+                        monitoring.
+                    </p>
+                </section>
+
+                <section>
+                    <h3 style="margin-bottom: 12px; font-size: 20px;">3. Stability Risk Classification</h3>
+                    <p>
+                        A **Fully Connected Neural Network (FCNN)** processes encoded geometric vectors to determine the
+                        structural severity. The system classifies observations into Low, Moderate, or High risk
+                        categories based on learned patterns of soil failure and surface instability.
+                    </p>
+                </section>
+            </div>
+        </div>
+
+        <div
+            style="margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border-color); text-align: center;">
+            <a href="{{ url_for('dashboard') }}" class="primary-btn" style="width: auto; padding: 14px 50px;">
+                Initialize Research Scanner
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

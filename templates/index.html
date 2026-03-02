@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div
+    style="min-height: 50vh; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; text-align: center; padding: 20px 0 0 0;">
+    <h1
+        style="font-size: clamp(40px, 8vw, 130px); margin-bottom: 24px; background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; line-height: 1.1; font-weight: 900; text-transform: uppercase; letter-spacing: -2px;">
+        Soil Crack Detection<br>Using Aerial Images</h1>
+    <p
+        style="color: var(--text-muted); font-size: clamp(18px, 1.8vw, 26px); max-width: 1000px; margin: 0 auto 80px; line-height: 1.6; opacity: 0.8;">
+        Aerial crack segmentation and severity assessment platform.
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 40px; width: 100%;">
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('dashboard') }}" class="btn-pipeline"
+            style="width: auto; padding: 0 80px; height: 90px; display: flex; align-items: center; text-decoration: none; font-size: 22px;">OPEN
+            COMMAND CONSOLE</a>
+        {% else %}
+        <a href="{{ url_for('login') }}" class="btn-pipeline"
+            style="width: auto; padding: 0 80px; height: 90px; display: flex; align-items: center; text-decoration: none; font-size: 22px;">SIGN
+            IN</a>
+        <a href="{{ url_for('register') }}"
+            style="color: white; text-decoration: none; font-size: 20px; font-weight: 700; border: 2px solid var(--border); padding: 0 80px; height: 90px; display: flex; align-items: center; border-radius: 16px; transition: all 0.3s;">SIGN
+            UP</a>
+        {% endif %}
+    </div>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; margin-top: 5px; width: 100%;">
+    <div
+        style="background: var(--card-bg); padding: 60px 40px; border-radius: 24px; border: 1px solid var(--border); text-align: left;">
+        <h3 style="color: var(--primary); font-size: 32px; margin-bottom: 20px; font-weight: 800;">Image Upload</h3>
+        <p style="color: var(--text-muted); font-size: 18px; line-height: 1.6;">Securely ingest high-resolution aerial
+            imagery into the neural processing pipeline.</p>
+    </div>
+    <div
+        style="background: var(--card-bg); padding: 60px 40px; border-radius: 24px; border: 1px solid var(--border); text-align: left;">
+        <h3 style="color: var(--accent); font-size: 32px; margin-bottom: 20px; font-weight: 800;">Crack Detection</h3>
+        <p style="color: var(--text-muted); font-size: 18px; line-height: 1.6;">Real-time segmentation and
+            classification of structural anomalies using ResNet and UNet models.</p>
+    </div>
+    <div
+        style="background: var(--card-bg); padding: 60px 40px; border-radius: 24px; border: 1px solid var(--border); text-align: left;">
+        <h3 style="color: #ea4335; font-size: 32px; margin-bottom: 20px; font-weight: 800;">Severity Analysis</h3>
+        <p style="color: var(--text-muted); font-size: 18px; line-height: 1.6;">Automated structural risk assessment
+            providing actionable insights.</p>
+    </div>
+</div>
+{% endblock %}

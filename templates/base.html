@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Crack Detection Using Aerial Images</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="top-navbar">
+        <div class="navbar-content">
+            <nav class="nav-links">
+                {% if current_user.is_authenticated %}
+                <a href="{{ url_for('index') }}" class="nav-link">Home</a>
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Console</a>
+                {% if current_user.role == 'admin' %}
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link" style="color: var(--accent);">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('comparison') }}" class="nav-link">Comparison</a>
+                <a href="{{ url_for('history') }}" class="nav-link">History</a>
+                <a href="{{ url_for('logout') }}" class="nav-link" style="color: #64748b;">Logout ({{
+                    current_user.username }})</a>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="nav-link">Sign In</a>
+                <a href="{{ url_for('register') }}" class="nav-link">Sign Up</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-container">
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        {% for message in messages %}
+        <div
+            style="background: rgba(66, 133, 244, 0.1); border: 1px solid var(--primary); padding: 16px; border-radius: 8px; margin-bottom: 24px; font-size: 14px; color: var(--primary);">
+            SYSTEM: {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer
+        style="padding: 60px 0; text-align: center; color: var(--text-muted); font-size: 11px; letter-spacing: 1px; text-transform: uppercase;">
+        Neural Pipeline Verified • System Node v4.0.1
+    </footer>
+</body>
+
+</html>
