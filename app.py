@@ -19,7 +19,12 @@ load_dotenv()
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'default-secret-key-change-me')
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+# Handle DATABASE_URL compatibility (postgres:// -> postgresql://)
+db_url = os.getenv('DATABASE_URL')
+if db_url and db_url.startswith("postgres://"):
+    db_url = db_url.replace("postgres://", "postgresql://", 1)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MASK_FOLDER'] = 'uploads/masks'
@@ -33,12 +38,20 @@ cloudinary.config(
     secure=True
 )
 
+# Hugging Face Iframe Session Fix
+app.config.update(
+    SESSION_COOKIE_SAMESITE='None',
+    SESSION_COOKIE_SECURE=True
+)
+
 db.init_app(app)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+print("Initializing AI Pipeline (loading models)...")
 pipeline = SoilCrackPipeline()
+print("AI Pipeline loaded successfully.")
 
 # Ensure folders exist
 if not os.path.exists(app.config['UPLOAD_FOLDER']):
@@ -81,8 +94,10 @@ def register():
         
         # First registered user could be admin or use manual SQL as requested
         # For now, following instructions to leave role as default 'user'
+        print(f"DEBUG: Attempting to register user: {username}")
         db.session.add(user)
         db.session.commit()
+        print(f"DEBUG: User {username} registered successfully.")
         return redirect(url_for('login'))
     return render_template('register.html')
 
@@ -92,11 +107,18 @@ def login():
         username = request.form['username']
         password = request.form['password']
         user = User.query.filter_by(username=username).first()
-        if user and check_password_hash(user.password_hash, password):
-            login_user(user)
-            if user.role == 'admin':
-                return redirect(url_for('admin_dashboard'))
-            return redirect(url_for('dashboard'))
+        if user:
+            print(f"DEBUG: Login Attempt - User {username} found in DB.")
+            if check_password_hash(user.password_hash, password):
+                print(f"DEBUG: Login successful for {username}")
+                login_user(user)
+                if user.role == 'admin':
+                    return redirect(url_for('admin_dashboard'))
+                return redirect(url_for('dashboard'))
+            else:
+                print(f"DEBUG: Login failed - Incorrect password for {username}")
+        else:
+            print(f"DEBUG: Login failed - User {username} not found in DB.")
         flash('Invalid credentials')
     return render_template('login.html')
 
@@ -265,7 +287,15 @@ def predict():
                             highlight_url=highlight_url)
 
 if __name__ == '__main__':
+    print("Starting Flask application setup...")
     with app.app_context():
-        # Using db.create_all() for development. In production, migrations are preferred.
-        db.create_all()
-    app.run(debug=(app.config['FLASK_ENV'] == 'development'))
+        try:
+            print("Connecting to database and creating tables...")
+            db.create_all()
+            print("Database initialized.")
+        except Exception as e:
+            print(f"Error initializing database: {e}")
+    
+    port = int(os.environ.get("PORT", 5000))
+    print(f"App running on port {port}")
+    app.run(host='0.0.0.0', port=port, debug=(app.config['FLASK_ENV'] == 'development'))

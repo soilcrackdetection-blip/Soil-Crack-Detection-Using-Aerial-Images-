@@ -1,3 +1,12 @@
+---
+title: Soil Crack Detection
+emoji: 🌱
+colorFrom: green
+colorTo: yellow
+sdk: docker
+pinned: false
+---
+
 # Soil Crack Detection Platform
 
 Professional AI-driven platform for detecting and analyzing soil cracks using advanced segmentation and classification models.

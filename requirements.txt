@@ -12,3 +12,4 @@ cloudinary
 gunicorn
 scikit-learn
 scikit-image
+opencv-python
