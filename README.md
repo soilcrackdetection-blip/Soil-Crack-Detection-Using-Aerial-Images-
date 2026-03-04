@@ -36,13 +36,23 @@ Professional AI-driven platform for detecting and analyzing soil cracks using ad
 4. Configure environment variables in `.env`:
    ```env
    SECRET_KEY=your_secret_key
-   DATABASE_URL=sqlite:///soil_crack.db
-   CLOUDINARY_URL=your_cloudinary_url
+   DATABASE_URL=postgresql://user:pass@host:port/dbname
+   CLOUDINARY_CLOUD_NAME=your_cloud_name
+   CLOUDINARY_API_KEY=your_api_key
+   CLOUDINARY_API_SECRET=your_api_secret
    ```
 5. Run the application:
    ```bash
    python app.py
    ```
+
+## Model Weights
+**Note**: Due to data size constraints, the pre-trained model weights (`.pth` files) are excluded from this repository via `.gitignore`. 
+
+To use the platform:
+1.  **Training**: Run the scripts in the `training/` directory (e.g., `python training/classification.py`, `python training/segmentation.py`, etc.) to generate the models.
+2.  **Output**: After training, the models will be automatically saved in the `weights/` folder.
+3.  **Deployment**: If you are deploying to a server (like Render), you must ensure these weights are uploaded to your server using **Git LFS**.
 
 ## License
 MIT License

@@ -143,6 +143,34 @@
         color: var(--accent-blue);
         font-weight: 600;
     }
+
+    /* Mobile Overrides for Comparison Dashboard */
+    @media (max-width: 900px) {
+        .analytics-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .full-width-card {
+            grid-column: span 1;
+        }
+
+        .dashboard-header h1 {
+            font-size: 24px;
+        }
+
+        .analytics-card {
+            padding: 20px;
+        }
+
+        .chart-wrapper {
+            height: 250px;
+        }
+
+        .matrix-cell {
+            height: 60px;
+            font-size: 14px;
+        }
+    }
 </style>
 
 <div class="comparison-container">

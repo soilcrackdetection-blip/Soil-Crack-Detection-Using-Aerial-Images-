@@ -9,3 +9,6 @@ werkzeug
 python-dotenv
 psycopg2-binary
 cloudinary
+gunicorn
+scikit-learn
+scikit-image

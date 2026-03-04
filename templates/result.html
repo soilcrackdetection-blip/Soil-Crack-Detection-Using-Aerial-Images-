@@ -3,16 +3,17 @@
 {% block content %}
 <div class="result-header" style="margin-bottom: 60px;">
     <h1
-        style="font-size: 84px; margin-bottom: 12px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+        style="font-size: clamp(32px, 8vw, 84px); margin-bottom: 12px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
         Crack Analysis</h1>
     <h2
-        style="font-size: 42px; font-weight: 700; color: #{{ 'ea4335' if result.crack_found else '34a853' }}; letter-spacing: -1px;">
+        style="font-size: clamp(20px, 4vw, 42px); font-weight: 700; color: #{{ 'ea4335' if result.crack_found else '34a853' }}; letter-spacing: -1px;">
         {{ "CRACK PRESENT" if result.crack_found else "NO CRACK DETECTED" }}
     </h2>
 </div>
 
 {% if result.crack_found %}
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 48px;">
+<div
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; margin-bottom: 48px;">
     <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; overflow: hidden;">
         <img src="{{ original_url }}" class="card-image" alt="Original Imagery Frame"
             style="width: 100%; height: auto; display: block;">
@@ -36,45 +37,49 @@
     </div>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 64px;">
-    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 48px; border-radius: 16px;">
+<div
+    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 32px; margin-bottom: 64px;">
+    <div
+        style="background: var(--card-bg); border: 1px solid var(--border); padding: clamp(24px, 5vw, 48px); border-radius: 16px;">
         <div
             style="font-size: 14px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">
             Crack Length</div>
-        <div style="font-size: 56px; font-weight: 700; color: var(--primary);">{{ "%.2f"|format(result.length) }} <span
-                style="font-size: 20px; color: var(--text-muted);">px</span></div>
+        <div style="font-size: clamp(32px, 6vw, 56px); font-weight: 700; color: var(--primary);">{{
+            "%.2f"|format(result.length) }} <span style="font-size: 16px; color: var(--text-muted);">px</span></div>
     </div>
-    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 48px; border-radius: 16px;">
+    <div
+        style="background: var(--card-bg); border: 1px solid var(--border); padding: clamp(24px, 5vw, 48px); border-radius: 16px;">
         <div
             style="font-size: 14px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">
             Crack Width</div>
-        <div style="font-size: 56px; font-weight: 700; color: var(--accent);">{{ "%.2f"|format(result.width) }} <span
-                style="font-size: 20px; color: var(--text-muted);">px</span></div>
+        <div style="font-size: clamp(32px, 6vw, 56px); font-weight: 700; color: var(--accent);">{{
+            "%.2f"|format(result.width) }} <span style="font-size: 16px; color: var(--text-muted);">px</span></div>
     </div>
-    <div style="background: var(--card-bg); border: 1px solid var(--border); padding: 48px; border-radius: 16px;">
+    <div
+        style="background: var(--card-bg); border: 1px solid var(--border); padding: clamp(24px, 5vw, 48px); border-radius: 16px;">
         <div
             style="font-size: 14px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; letter-spacing: 1px;">
             Crack Area</div>
-        <div style="font-size: 56px; font-weight: 700; color: #ea4335;">{{ "%.0f"|format(result.area) }} <span
-                style="font-size: 24px; color: var(--text-muted);">px²</span></div>
+        <div style="font-size: clamp(32px, 6vw, 56px); font-weight: 700; color: #ea4335;">{{ "%.0f"|format(result.area)
+            }} <span style="font-size: 20px; color: var(--text-muted);">px²</span></div>
     </div>
 </div>
 
 <div
     style="background: rgba(234, 67, 53, 0.05); border: 1px solid rgba(234, 67, 53, 0.2); padding: 40px; border-radius: 12px;">
     <div style="display: flex; flex-direction: column; align-items: flex-start; gap: 16px; margin-bottom: 32px;">
-        <span class="severity-tag {{ result.severity|lower }}"
-            style="padding: 12px 40px; font-size: 28px; font-weight: 900; border-radius: 12px; letter-spacing: 1px;">
+        <span class="severity-tag {{ result.severity|lower|replace(' ', '-') }}"
+            style="padding: 12px 30px; font-size: clamp(18px, 4vw, 28px); font-weight: 900; border-radius: 12px; letter-spacing: 1px;">
             SEVERITY: {{ result.severity }}
         </span>
-        <h3 style="margin-bottom: 0; font-size: 36px; font-weight: 800;">Recommendations</h3>
+        <h3 style="margin-bottom: 0; font-size: clamp(24px, 5vw, 36px); font-weight: 800;">Recommendations</h3>
     </div>
     <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
         {% if result.recommendation %}
         {% for item in result.recommendation %}
         <div
-            style="display: flex; gap: 20px; align-items: center; color: var(--text-muted); font-size: 22px; line-height: 1.6; margin-bottom: 8px;">
-            <span style="color: var(--accent); font-size: 18px;">▶</span> {{ item }}
+            style="display: flex; gap: 20px; align-items: flex-start; color: var(--text-muted); font-size: clamp(16px, 3vw, 22px); line-height: 1.6; margin-bottom: 12px;">
+            <span style="color: var(--accent); font-size: 18px; margin-top: 4px;">▶</span> {{ item }}
         </div>
         {% endfor %}
         {% else %}
