@@ -242,6 +242,11 @@ h2 {
     color: #ea4335;
 }
 
+.severity-tag.no-crack {
+    color: #34a853;
+    /* Green for safe/no crack */
+}
+
 .card-date {
     font-size: 11px;
     color: var(--text-muted);

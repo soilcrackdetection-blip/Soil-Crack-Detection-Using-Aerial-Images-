@@ -44,8 +44,10 @@
             class="card-image" alt="Imagery Frame">
         <div class="card-body">
             <div class="card-meta">
-                <span class="severity-tag {{ pred.severity|lower if pred.severity else 'unknown' }}">{{ pred.severity if
-                    pred.severity else 'N/A' }} RISK</span>
+                <span
+                    class="severity-tag {{ pred.severity|lower|replace(' ', '-') if pred.severity else 'unknown' }}">{{
+                    pred.severity if
+                    pred.severity else 'N/A' }}</span>
                 <span class="card-date">{{ pred.created_at.strftime('%d %b %Y') if pred.created_at else 'N/A' }}</span>
             </div>
             <div class="card-stats">

@@ -24,8 +24,8 @@
                 <a href="{{ url_for('logout') }}" class="nav-link" style="color: #64748b;">Logout ({{
                     current_user.username }})</a>
                 {% else %}
-                <a href="{{ url_for('login') }}" class="nav-link">Sign In</a>
-                <a href="{{ url_for('register') }}" class="nav-link">Sign Up</a>
+                <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                <a href="{{ url_for('register') }}" class="nav-link">Register</a>
                 {% endif %}
             </nav>
         </div>

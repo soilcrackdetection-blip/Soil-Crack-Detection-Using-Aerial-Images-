@@ -251,11 +251,13 @@
         <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 16px;">Research Summary</h3>
         <p class="research-note">
             The experimental results validate that the <span class="highlight-text">ResNet-UNet</span> architecture
-            significantly enhances boundary preservation compared to baseline U-Net models.
-            By integrating a multi-stage pipeline, the system achieves a <span class="highlight-text">33% reduction in
-                latency</span> without compromising analytical precision.
-            The training convergence analysis demonstrates that the proposed residual connections enable faster and more
-            stable metric optimization across extended epochs.
+            achieves a <span class="highlight-text">71.87% Dice Score</span> on unseen test data, significantly
+            outperforming baseline models.
+            The Stage 1 Classification model demonstrates robust generalization with <span class="highlight-text">93.88%
+                Accuracy</span>.
+            By integrating these models into a multi-stage pipeline, the system achieves a <span
+                class="highlight-text">33% reduction in
+                latency</span> while maintaining high analytical precision for practical field deployment.
         </p>
     </footer>
 </div>
@@ -286,23 +288,23 @@
         new Chart(document.getElementById('segmentationChart'), {
             type: 'bar',
             data: {
-                labels: ['Dice', 'IoU', 'Accuracy'],
+                labels: ['Dice Score', 'IoU Score'],
                 datasets: [
-                    { label: 'U-Net', data: [0.78, 0.71, 0.88], backgroundColor: '#475569', borderRadius: 4 },
-                    { label: 'ResNet-UNet', data: [0.86, 0.80, 0.92], backgroundColor: '#3b82f6', borderRadius: 4 }
+                    { label: 'U-Net (Baseline)', data: [0.65, 0.55], backgroundColor: '#475569', borderRadius: 4 },
+                    { label: 'ResNet-UNet (Proposed)', data: [0.72, 0.63], backgroundColor: '#3b82f6', borderRadius: 4 }
                 ]
             },
             options: chartOptions
         });
 
-        // 2. Severity Comparison (Traditional vs FCNN)
+        // 2. Severity Classification Accuracy (Stage 1)
         new Chart(document.getElementById('severityComparisonChart'), {
             type: 'bar',
             data: {
                 labels: ['Accuracy (%)'],
                 datasets: [
-                    { label: 'Traditional Threshold', data: [68], backgroundColor: '#475569', borderRadius: 4 },
-                    { label: 'Neural FCNN', data: [94], backgroundColor: '#3b82f6', borderRadius: 4 }
+                    { label: 'Traditional Method', data: [68], backgroundColor: '#475569', borderRadius: 4 },
+                    { label: 'CNN Classifier', data: [93.88], backgroundColor: '#3b82f6', borderRadius: 4 }
                 ]
             },
             options: {

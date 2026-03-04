@@ -204,6 +204,16 @@ def predict():
 
     result = pipeline.run(temp_path)
 
+    mask_url = None
+    mask_public_id = None
+    highlight_url = None
+    highlight_public_id = None
+    crack_len = 0.0
+    crack_wid = 0.0
+    crack_area = 0.0
+    severity = "No Crack"
+    recommendation = result['recommendation']
+
     if result['crack_found']:
         # Upload Mask
         mask_io = io.BytesIO()
@@ -222,36 +232,37 @@ def predict():
         highlight_url = highlight_upload['secure_url']
         highlight_public_id = highlight_upload['public_id']
 
-        analysis = AnalysisResult(
-            user_id=current_user.id,
-            original_image_url=original_url,
-            original_public_id=original_public_id,
-            mask_image_url=mask_url,
-            mask_public_id=mask_public_id,
-            highlight_image_url=highlight_url,
-            highlight_public_id=highlight_public_id,
-            crack_length=result['length'],
-            crack_width=result['width'],
-            crack_area=result['area'],
-            severity=result['severity'],
-            recommendation="\n".join(result['recommendation'])
-        )
-        db.session.add(analysis)
-        db.session.commit()
+        crack_len = result['length']
+        crack_wid = result['width']
+        crack_area = result['area']
+        severity = result['severity']
+
+    # Always Save to History
+    analysis = AnalysisResult(
+        user_id=current_user.id,
+        original_image_url=original_url,
+        original_public_id=original_public_id,
+        mask_image_url=mask_url,
+        mask_public_id=mask_public_id,
+        highlight_image_url=highlight_url,
+        highlight_public_id=highlight_public_id,
+        crack_length=crack_len,
+        crack_width=crack_wid,
+        crack_area=crack_area,
+        severity=severity,
+        recommendation="\n".join(recommendation)
+    )
+    db.session.add(analysis)
+    db.session.commit()
+    
+    # Cleanup temporary file
+    if os.path.exists(temp_path):
+        os.remove(temp_path)
         
-        # Cleanup temporary file
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-            
-        return render_template('result.html', result=result, 
-                               original_url=original_url, 
-                               mask_url=mask_url, 
-                               highlight_url=highlight_url)
-    else:
-        # Cleanup temporary file
-        if os.path.exists(temp_path):
-            os.remove(temp_path)
-        return render_template('result.html', result=result, original_url=original_url)
+    return render_template('result.html', result=result, 
+                            original_url=original_url, 
+                            mask_url=mask_url, 
+                            highlight_url=highlight_url)
 
 if __name__ == '__main__':
     with app.app_context():
